@@ -1,59 +1,84 @@
-Create TABLE student (
-    student_id int PRIMARY KEY,
-    fistname VARCHAR(50) NOT NULL,
-    lastname VARCHAR(50) NOT NULL,
-    matricule int 
-);
-
-Create TABLE student_course(
-    total_grade int,
-    student_id int,
-    course_id int,
-    FOREIGN KEY (student_id) References strudent(student_id),
-    FOREIGN KEY (course_id) reference course(course_id)
-);
-
-Create TABLE course ( 
-    course_id int PRIMARY KEY,
-    title int 
-    sigle VARCHAR(15) not null,
-);
-
-Create TABLE prof_course(
-    course_id int,
-    prof_id int 
-    FOREIGN KEY (course_id) References (course_id),
-    FOREIGN KEY(prof_id) References(prof_id)
-);
-
-Create TABLE prof(
-    prof_id int PRIMARY KEY,
-    fistname VARCHAR(50) NOT NULL,
-    lastname VARCHAR(50) NOT NULL
-);
+Drop table departement cascade;
 
 Create TABLE departement(
-    departement_i : int PRIMARY KEY,
-    title VARCHAR(30)
+    departement_id int PRIMARY KEY,
+    title VARCHAR(30),
+    sigle VARCHAR(10)
+);
+Drop table student cascade;
+Create TABLE student (
+    student_id int PRIMARY KEY,
+    firstname VARCHAR(50) NOT NULL,
+    lastname VARCHAR(50) NOT NULL,
+    matricule VARCHAR(20) NOT NULL
+);
+DROP TABLE course cascade;
+CREATE TABLE course ( 
+    course_id INT PRIMARY KEY,
+    title VARCHAR(100), 
+    sigle VARCHAR(15) NOT NULL,
+    departement_id int,
+    FOREIGN KEY (departement_id) REFERENCES departement(departement_id)
 );
 
-Create TABLE Forum(
+drop table student_course;
+Create TABLE student_course(
+    student_id int,
+    course_id int,
+    total_grade int, 
+    FOREIGN KEY (student_id) References student(student_id),
+    FOREIGN KEY (course_id) References course(course_id)
+);
+drop table prof cascade ;
+Create TABLE prof(
+    prof_id int PRIMARY KEY,
+    firstname VARCHAR(50) NOT NULL,
+    lastname VARCHAR(50) NOT NULL,
+    departement_id int,
+    FOREIGN KEY (departement_id) REFERENCES departement(departement_id)
+);
+drop table prof_course ;
+Create TABLE prof_course(
+    course_id int,
+    prof_id int,
+    FOREIGN KEY (course_id) References course(course_id),
+    FOREIGN KEY(prof_id) References prof(prof_id)
+);
+
+drop table forum cascade;
+Create TABLE forum(
+    forum_id int PRIMARY KEY,
     title VARCHAR(20) NOT NULL,
+    course_id int,
+    FOREIGN KEY(course_id) References course (course_id)
 
 );
-
+drop table forum_message ;
 Create TABLE forum_message(
-    message VARCHAR(1) NOT NULL
+    forum_message_id int PRIMARY KEY,
+    message VARCHAR(50) NOT NULL,
+    student_id int,
+    prof_id int,
+    forum_id int,
+    FOREIGN KEY(student_id)References student (student_id),
+    FOREIGN KEY(prof_id)References prof (prof_id),
+    FOREIGN KEY(forum_iD)References forum (forum_id)
 );
-
-Create TABLE evalutaion_file(
-    bucket_url int 
-
-);
-
+drop table evaluation cascade;
 Create TABLE evaluation(
+    evaluation_id int PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     type VARCHAR(20) NOT NULL,
-    type VARCHAR(20) NOT NULL,
-    due_datetime DATE 
-)
+    due_datetime DATE,
+    course_id int,
+    FOREIGN KEY(course_id)References course (course_id)
+);
+drop table evaluation_file;
+Create TABLE evaluation_file(
+    evaluation_file_id int PRIMARY KEY,
+    bucket_url int,
+    evaluation_id int ,
+    FOREIGN KEY(evaluation_id)References evaluation (evaluation_id)
+
+);
+
