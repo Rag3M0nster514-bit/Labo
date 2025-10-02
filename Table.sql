@@ -2,8 +2,8 @@ Drop table departement cascade;
 
 Create TABLE departement(
     departement_id int PRIMARY KEY,
-    title VARCHAR(30),
-    sigle VARCHAR(10)
+    title VARCHAR(30)NOT NULL,
+    sigle VARCHAR(10) NOT NULL
 );
 Drop table student cascade;
 Create TABLE student (
@@ -15,7 +15,7 @@ Create TABLE student (
 DROP TABLE course cascade;
 CREATE TABLE course ( 
     course_id INT PRIMARY KEY,
-    title VARCHAR(100), 
+    title VARCHAR(100) NOT NULL, 
     sigle VARCHAR(15) NOT NULL,
     departement_id int,
     FOREIGN KEY (departement_id) REFERENCES departement(departement_id)
@@ -23,11 +23,12 @@ CREATE TABLE course (
 
 drop table student_course;
 Create TABLE student_course(
-    student_id int,
-    course_id int,
+    student_id int NOT NULL,
+    course_id int Not NULL,
     total_grade int, 
-    FOREIGN KEY (student_id) References student(student_id),
-    FOREIGN KEY (course_id) References course(course_id)
+    FOREIGN KEY (student_id) References student(student_id) ON DELETE CASCADE ,
+    FOREIGN KEY (course_id) References course(course_id) ON DELETE CASCADE,
+    CONSTRAINT unique_student_course UNIQUE(student_id, course_id)
 );
 drop table prof cascade ;
 Create TABLE prof(
@@ -35,14 +36,14 @@ Create TABLE prof(
     firstname VARCHAR(50) NOT NULL,
     lastname VARCHAR(50) NOT NULL,
     departement_id int,
-    FOREIGN KEY (departement_id) REFERENCES departement(departement_id)
+    FOREIGN KEY (departement_id) REFERENCES departement(departement_id)ON DELETE CASCADE
 );
 drop table prof_course ;
 Create TABLE prof_course(
     course_id int,
     prof_id int,
-    FOREIGN KEY (course_id) References course(course_id),
-    FOREIGN KEY(prof_id) References prof(prof_id)
+    FOREIGN KEY (course_id) References course(course_id) ON DELETE CASCADE,
+    FOREIGN KEY(prof_id) References prof(prof_id)ON DELETE CASCADE
 );
 
 drop table forum cascade;
@@ -50,7 +51,7 @@ Create TABLE forum(
     forum_id int PRIMARY KEY,
     title VARCHAR(20) NOT NULL,
     course_id int,
-    FOREIGN KEY(course_id) References course (course_id)
+    FOREIGN KEY(course_id) References course (course_id) ON DELETE CASCADE
 
 );
 drop table forum_message ;
@@ -60,9 +61,9 @@ Create TABLE forum_message(
     student_id int,
     prof_id int,
     forum_id int,
-    FOREIGN KEY(student_id)References student (student_id),
-    FOREIGN KEY(prof_id)References prof (prof_id),
-    FOREIGN KEY(forum_iD)References forum (forum_id)
+    FOREIGN KEY(student_id)References student (student_id)ON DELETE CASCADE,
+    FOREIGN KEY(prof_id)References prof (prof_id)ON DELETE CASCADE,
+    FOREIGN KEY(forum_iD)References forum (forum_id) ON DELETE CASCADE
 );
 drop table evaluation cascade;
 Create TABLE evaluation(
@@ -71,14 +72,14 @@ Create TABLE evaluation(
     type VARCHAR(20) NOT NULL,
     due_datetime DATE,
     course_id int,
-    FOREIGN KEY(course_id)References course (course_id)
+    FOREIGN KEY(course_id)References course (course_id) ON DELETE CASCADE
 );
 drop table evaluation_file;
 Create TABLE evaluation_file(
     evaluation_file_id int PRIMARY KEY,
     bucket_url int,
     evaluation_id int ,
-    FOREIGN KEY(evaluation_id)References evaluation (evaluation_id)
+    FOREIGN KEY(evaluation_id)References evaluation (evaluation_id) ON DELETE CASCADE
 
 );
 
