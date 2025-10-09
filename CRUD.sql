@@ -1482,17 +1482,17 @@ INSERT INTO student_course(student_id, course_id, total_grade) VALUES
 
 
 --PROF
-INSERT INTO prof (prof_id,firstname,lastname) VALUES
-(1, 'Jean-Michel', 'Dubois'),
-(2, 'Marie-Claire', 'Lefebvre'),
-(3, 'François', 'Martin'),
-(4, 'Catherine', 'Bernard'),
-(5, 'Philippe', 'Rousseau'),
-(6, 'Sylvie', 'Moreau'),
-(7, 'Alain', 'Durand'),
-(8, 'Isabelle', 'Leroy'),
-(9, 'Patrick', 'Girard'),
-(10, 'Monique', 'Vincent');
+INSERT INTO prof (prof_id,firstname,lastname,departement_id) VALUES
+(1, 'Jean-Michel', 'Dubois',1),
+(2, 'Marie-Claire', 'Lefebvre',1),
+(3, 'François', 'Martin',2),
+(4, 'Catherine', 'Bernard',3),
+(5, 'Philippe', 'Rousseau',4),
+(6, 'Sylvie', 'Moreau',5),
+(7, 'Alain', 'Durand',6),
+(8, 'Isabelle', 'Leroy',7),
+(9, 'Patrick', 'Girard',5),
+(10, 'Monique', 'Vincent',6);
 
 
 
@@ -12633,7 +12633,7 @@ set due_datetime = '2050-12-31'
 where course_id = 2;
 
 INSERT INTO student_course (student_id,course_id,total_grade ) 
-select 1,course_id, NULL
+SELECT 1,course_id, NULL
 From course
 WHERE course_id NOT IN (
     SELECT course_id
