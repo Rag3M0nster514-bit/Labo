@@ -1,4 +1,7 @@
-
+BEGIN;
+SET TRANSACTION READ ONLY;
+SET LOCAL statement_timeout = '5s';        -- évite de bloquer en cas de gros locks
+SET LOCAL lock_timeout = '1s';
 
 
 --Faire une requête qui JOIN(côté gauche) les étudiants avec leurs messages.
@@ -96,3 +99,4 @@ JOIN student_course sc ON e.course_id = sc.course_id
 WHERE e.course_id = 3
 ORDER BY e.type, e.evaluation_id;
 
+COMMIT;

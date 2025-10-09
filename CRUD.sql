@@ -1,3 +1,5 @@
+BEGIN;
+ROLLBACK;
 INSERT INTO departement(departement_id, title, sigle) VALUES
 (1, 'Informatique', 'INFO'),
 (2, 'Mathématique', 'MAT'),
@@ -2614,7 +2616,7 @@ INSERT INTO evaluation_file (evaluation_file_id, bucket_url, evaluation_id) VALU
 (499, 'https://bucket.com/file499.pdf', 499),
 (500, 'https://bucket.com/file500.pdf', 500);
 
-
+SAVEPOINT sp_forum_message;
 
 INSERT INTO forum_message(forum_message_id, message, student_id, prof_id, forum_id) VALUES
 (1, 'ImaYVCXglFJpHfRgiRQSugAxwYGcTWwVYFHPI', 135, NULL, 48),
@@ -12618,20 +12620,26 @@ INSERT INTO forum_message(forum_message_id, message, student_id, prof_id, forum_
 (9999, 'mvQIPkFpxfzbZxJjXJOTFiMyOYVqOACzmEbJCL gNrgrbDc', 94, NULL, 84),
 (10000, 'PjeuUaniYxioQOlUzTkZxPIwO WyOqKvAWBGvsAzN', 63, NULL, 20);
 
+--Tous les étudiants par le "lastname" suivant : "Doe"
 UPDATE student
 SET lastname = 'Doe';
 
+--Modier la valeur title de la table"department" du département d'informatique par "INFORMATIQUE"
 Update departement
 SET title = 'INFORMATIQUE'
 Where title = 'Informatique';
 
-/*Update student_course
-set total_grade = NULL ;*/
+--Effacer la note nale de tous, et laisser les valeurs en tant que "null".
+Update student_course
+set total_grade = NULL ;
+
+--Pour un cours spécique de votre choix, le sélectionner par ID et changer la date de remise "due_datetime" de toutes les évaluations ("evaluation") pour le 31 décembre 2050.
 
 Update evaluation
 set due_datetime = '2050-12-31'
 where course_id = 2;
 
+--Modifier les données respectives pour qu'une personne étudiante de votre choix, sélectionnée par ID, soit dans tous les cours actuellement dans la base de données.
 INSERT INTO student_course (student_id,course_id,total_grade ) 
 SELECT 1,course_id, NULL
 From course
@@ -12641,7 +12649,8 @@ WHERE course_id NOT IN (
     WHERE student_id = 1
 );
 
+--Supprimer un (1) cours de votre choix, et ses forums et messages doivent être supprimés en cascade
 Delete from course 
 where course_id = 4;
 
-
+COMMIT;
