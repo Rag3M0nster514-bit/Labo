@@ -84,15 +84,23 @@ Create TABLE evaluation_file(
     FOREIGN KEY(evaluation_id)References evaluation (evaluation_id) ON DELETE CASCADE
 
 );
+-- Dépt. "Informatique" filtré par titre + joins
+CREATE INDEX IF NOT EXISTS idx_departement_title         ON departement(title);
+CREATE INDEX IF NOT EXISTS idx_course_departement        ON course(departement_id);
 
--- Index sur course_id dans student_course pour accélérer la jointure
-CREATE INDEX idx_student_course_course_id ON student_course(course_id);
 
--- Index sur course_id dans evaluation pour accélérer la jointure
-CREATE INDEX idx_evaluation_course_id ON evaluation(course_id);
 
--- Index sur type dans evaluation pour optimiser la partition
-CREATE INDEX idx_evaluation_type ON evaluation(type);
 
--- Index combiné sur type et evaluation_id pour optimiser le ORDER BY dans la fenêtre
-CREATE INDEX idx_evaluation_type_id ON evaluation(type, evaluation_id);
+-- Joins forum / messages
+CREATE INDEX IF NOT EXISTS idx_forum_message_student     ON forum_message(student_id);
+CREATE INDEX IF NOT EXISTS idx_forum_message_forum       ON forum_message(forum_id);
+
+
+-- Joins profs ↔ cours (et éviter les doublons)
+CREATE UNIQUE INDEX IF NOT EXISTS uq_prof_course         ON prof_course(prof_id, course_id);
+
+
+-- Joins étudiants ↔ cours (tu as déjà une contrainte UNIQUE qui crée l’index,
+-- mais on s’assure de l’ordre des colonnes utile aux recherches par étudiant)
+CREATE INDEX IF NOT EXISTS idx_student_course_student    ON student_course(student_id);
+CREATE INDEX IF NOT EXISTS idx_student_course_course     ON student_course(course_id);

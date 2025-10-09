@@ -48,20 +48,18 @@ JOIN prof ON prof_course.prof_id = prof.prof_id
 Where course.course_id = 2;
 
 --Monter tous les étudiants et les profs dans le départment d'informatique, sélectionné à partir du title de department
-
 -- Étudiants
-SELECT DISTINCT s.student_id, s.firstname, s.lastname
+SELECT s.student_id, s.firstname, s.lastname,'Étudiant' AS role
 FROM student s
-JOIN student_course sc ON s.student_id = sc.student_id
-JOIN course c ON sc.course_id = c.course_id
-JOIN departement d ON c.departement_id = d.departement_id
-WHERE d.title = 'Informatique';
+JOIN departement d ON d.departement_id = s.departement_id
+WHERE (d.title) = 'INFORMATIQUE'
 
--- Profs
-SELECT DISTINCT p.prof_id, p.firstname, p.lastname
+UNION
+
+SELECT p.prof_id, p.firstname, p.lastname,'Professeur' AS role
 FROM prof p
-JOIN departement d ON p.departement_id = d.departement_id
-WHERE d.title = 'Informatique';
+JOIN departement d ON d.departement_id = p.departement_id
+WHERE (d.title) = 'INFORMATIQUE';
 
 --Montrer les profs d'une personne étudiante.
 SELECT DISTINCT p.prof_id,
@@ -97,3 +95,4 @@ FROM evaluation e
 JOIN student_course sc ON e.course_id = sc.course_id
 WHERE e.course_id = 3
 ORDER BY e.type, e.evaluation_id;
+
